@@ -1,16 +1,18 @@
-body {
+  body {
     font-family: "Poppins", sans-serif;
     background: linear-gradient(135deg, #e0e7ff, #f0f9ff);
     margin: 0;
     padding: 20px;
   }
 
-  #btn-container{
+  /* Container for button + search */
+  #btn-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 30px ;
-    padding-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative; /* relative for absolute suggestions */
   }
 
   #btn {
@@ -19,9 +21,9 @@ body {
     font-weight: 600;
     border: none;
     border-radius: 8px;
-    padding: 10px 20px;
+    padding: 10px 22px;
     cursor: pointer;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
   }
 
@@ -30,36 +32,120 @@ body {
     box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
   }
 
+  /* Search Input */
+  #search {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 240px; /* search box width */
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  #search:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 10px rgba(79,70,229,0.3);
+  }
+
+  /* Suggestions dropdown */
+  #suggestions {
+    position: absolute;
+    top: 100%; 
+    left: 30%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    box-sizing: border-box;
+    width: 100%; /* default: search box width */
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: none;
+  }
+
+  #suggestions::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #suggestions::-webkit-scrollbar-thumb {
+    background-color: rgba(79,70,229,0.4);
+    border-radius: 4px;
+  }
+
+  #suggestions div {
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  #suggestions div.active,
+  #suggestions div:hover {
+    background: #4f46e5;
+    color: white;
+    transform: scale(1.03); /* smooth & subtle */
+  }
+
+  /* Container Grid */
   #container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
+    gap: 22px;
+    margin-top: 25px;
   }
 
   .country-card {
     background: white;
-    border-radius: 12px;
-    padding: 15px;
+    border-radius: 14px;
+    padding: 18px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
   }
 
   .country-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.12);
   }
 
   .country-card img {
-    width: 100px;
-    height: 60px;
-    border-radius: 6px;
+    width: 100%;
+    max-width: 130px;
+    height: 75px;
+    border-radius: 8px;
     object-fit: cover;
     margin-bottom: 10px;
   }
 
   .country-card p {
     margin: 5px 0;
-    color: #1e293b;}
+    color: #1e293b;
+    font-size: 0.95rem;
+  }
 
+  /* Large device: suggestion width 40% */
+  @media(min-width: 500px) {
+    #suggestions {
+      width: 40%;
+    }
+  }
+
+  @media (max-width: 500px) {
+    #btn-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+    #search {
+      width: 90%;
+    }
+    #suggestions {
+      width: 60%;
+    }
+    .country-card img {
+      max-width: 100px;
+      height: 60px;
+    }
+  }
