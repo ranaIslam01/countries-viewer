@@ -104,6 +104,7 @@
     text-align: center;
     box-shadow: 0 6px 15px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
+    background-color: rgba(128, 0, 128, 0.0)
   }
 
   .country-card:hover {
