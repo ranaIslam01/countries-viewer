@@ -49,6 +49,3 @@ Users can:
 5. Click the button again to **hide** the country data.
 
 ---
-
-## 🧩 Folder Structure
-
