@@ -6,8 +6,9 @@ const btn = document.getElementById("btn");
 const container = document.getElementById("container");
 const search = document.getElementById("search");
 const suggestions = document.getElementById("suggestions");
+
 const apiUrl = "https://restcountries.com/v3.1/all?fields=name,flags,population,cca3,capital";
-const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(apiUrl);
+const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
 
 // Display countries
 function displayCountries(data) {
@@ -32,8 +33,10 @@ btn.addEventListener("click", async () => {
       container.innerHTML = "<p>Loading data...</p>";
       try {
         const response = await fetch(proxyUrl);
-        const data = await response.json();
-        fetchedData = data;
+        const result = await response.json();
+        
+        // AllOrigins ডাটা string হিসেবে 'contents'-এ ফেরত দেয়, তাই JSON.parse করতে হয়
+        fetchedData = JSON.parse(result.contents);
       } catch (err) {
         console.log(err);
         container.innerHTML = "<p>Error loading data</p>";
@@ -62,7 +65,7 @@ btn.addEventListener("click", async () => {
 function updateSuggestions(filtered) {
   suggestions.innerHTML = "";
   selectedIndex = -1;
-  filtered.slice(0,5).forEach(c => {
+  filtered.slice(0, 5).forEach((c) => {
     const div = document.createElement("div");
     div.textContent = c.name.common;
     div.addEventListener("click", () => {
@@ -78,12 +81,12 @@ function updateSuggestions(filtered) {
 // Prefix-based search + hide suggestions if empty
 search.addEventListener("input", () => {
   const query = search.value.toLowerCase().trim();
-  if(query === "") {
+  if (query === "") {
     suggestions.style.display = "none";
     displayCountries(fetchedData);
     return;
   }
-  const filtered = fetchedData.filter(c =>
+  const filtered = fetchedData.filter((c) =>
     c.name.common.toLowerCase().startsWith(query)
   );
   updateSuggestions(filtered);
@@ -93,18 +96,18 @@ search.addEventListener("input", () => {
 // Keyboard navigation
 search.addEventListener("keydown", (e) => {
   const items = suggestions.querySelectorAll("div");
-  if(!items.length) return;
+  if (!items.length) return;
 
-  if(e.key === "ArrowDown") {
+  if (e.key === "ArrowDown") {
     selectedIndex = (selectedIndex + 1) % items.length;
     updateActive(items);
     e.preventDefault();
-  } else if(e.key === "ArrowUp") {
+  } else if (e.key === "ArrowUp") {
     selectedIndex = (selectedIndex - 1 + items.length) % items.length;
     updateActive(items);
     e.preventDefault();
-  } else if(e.key === "Enter") {
-    if(selectedIndex >= 0) {
+  } else if (e.key === "Enter") {
+    if (selectedIndex >= 0) {
       items[selectedIndex].click();
       e.preventDefault();
     }
