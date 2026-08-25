@@ -13,14 +13,26 @@ const apiUrl = "/api/countries";
 // Display countries
 function displayCountries(data) {
   container.innerHTML = "";
+  
+  if (!Array.isArray(data)) {
+    container.innerHTML = "<p>Invalid data format received</p>";
+    return;
+  }
+
   data.forEach((e) => {
+    // সেফলি ডাটা নেওয়ার ব্যবস্থা
+    const flagSrc = e.flags?.png || e.flags?.svg || "";
+    const countryName = e.name?.common || "Unknown";
+    const capitalName = e.capital?.[0] || "N/A";
+    const populationNum = e.population ? e.population.toLocaleString() : "N/A";
+
     const div = document.createElement("div");
     div.classList.add("country-card");
     div.innerHTML = `
-      <img src="${e.flags.png}" alt="${e.name.common} flag"/>
-      <p><b>${e.name.common}</b></p>
-      <p>Capital: ${e.capital ? e.capital[0] : "N/A"}</p>
-      <p>Population: ${e.population.toLocaleString()}</p>
+      <img src="${flagSrc}" alt="${countryName} flag"/>
+      <p><b>${countryName}</b></p>
+      <p>Capital: ${capitalName}</p>
+      <p>Population: ${populationNum}</p>
     `;
     container.appendChild(div);
   });
