@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/countries",
-      "destination": "https://restcountries.com/v3.1/all?fields=name,flags,population,cca3,capital"
+      "destination": "https://raw.githubusercontent.com/mledoze/countries/master/countries.json"
     }
   ]
 }
