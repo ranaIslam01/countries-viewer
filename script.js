@@ -7,8 +7,8 @@ const container = document.getElementById("container");
 const search = document.getElementById("search");
 const suggestions = document.getElementById("suggestions");
 
-const apiUrl = "https://restcountries.com/v3.1/all?fields=name,flags,population,cca3,capital";
-const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+// Vercel rewrite endpoint (no third-party CORS proxy needed)
+const apiUrl = "/api/countries";
 
 // Display countries
 function displayCountries(data) {
@@ -32,11 +32,11 @@ btn.addEventListener("click", async () => {
     if (fetchedData.length === 0) {
       container.innerHTML = "<p>Loading data...</p>";
       try {
-        const response = await fetch(proxyUrl);
-        const result = await response.json();
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network error");
         
-        // AllOrigins ডাটা string হিসেবে 'contents'-এ ফেরত দেয়, তাই JSON.parse করতে হয়
-        fetchedData = JSON.parse(result.contents);
+        const data = await response.json();
+        fetchedData = data;
       } catch (err) {
         console.log(err);
         container.innerHTML = "<p>Error loading data</p>";
