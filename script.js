@@ -6,6 +6,8 @@ const btn = document.getElementById("btn");
 const container = document.getElementById("container");
 const search = document.getElementById("search");
 const suggestions = document.getElementById("suggestions");
+const apiUrl = "https://restcountries.com/v3.1/all?fields=name,flags,population,cca3,capital";
+const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(apiUrl);
 
 // Display countries
 function displayCountries(data) {
@@ -29,9 +31,7 @@ btn.addEventListener("click", async () => {
     if (fetchedData.length === 0) {
       container.innerHTML = "<p>Loading data...</p>";
       try {
-        const response = await fetch(
-          "https://restcountries.com/v3.1/all?fields=name,flags,population,cca3,capital"
-        );
+        const response = await fetch(proxyUrl);
         const data = await response.json();
         fetchedData = data;
       } catch (err) {
